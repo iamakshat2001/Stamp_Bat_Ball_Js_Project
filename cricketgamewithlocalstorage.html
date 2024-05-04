@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cricket Game</title>
+    <link rel="stylesheet" href="cricket.css">
+    <style>
+      body {
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Bat Ball Stump Game</h1>
+
+   
+    
+    
+
+    <button class="choice-button"
+      onclick="
+   let computerChoice =  generateComputerChoice();
+   let resultMsg = getResult('Bat',computerChoice);
+  // console.log('you have choosen Bat');
+  // we comment this line because we directly use this message .
+ // const userMessage = 'You Have Choosen Bat';
+  // javaScript random() method generate random number between 0 to 1
+  // and here we multiply by three then these range will be from 0 to 3
+  //this will generate random number between 0 to 3
+ 
+  // const computerChoiceMsg =  `Computer Choice is ${computerChoice}`;
+  // const computerChoiceMsg = computerChoice;
+ 
+  showResult('Bat',computerChoice,resultMsg);"> <img src="images/bat.png" alt="Bat Image" class="choice-image"></button>
+
+    <button class="choice-button"
+      onclick="
+  
+  // console.log('you have choosen Bat');
+  // we comment this line because we directly use this message .
+ // const userMessage = 'You Have Choosen Bat';
+  // javaScript random() method generate random number between 0 to 1
+  // and here we multiply by three then these range will be from 0 to 3
+  //this will generate random number between 0 to 3
+  
+   computerChoice = generateComputerChoice();
+    resultMsg = getResult('Ball',computerChoice);
+    showResult('Ball',computerChoice,resultMsg);"
+    >
+    <img src="images/ball.png" alt="Ball Image" class="choice-image">
+    </button>
+    <button class="choice-button"
+      onclick="
+  
+  // console.log('you have choosen Bat');
+  // we comment this line because we directly use this message .
+ // const userMessage = 'You Have Choosen Bat';
+  // javaScript random() method generate random number between 0 to 1
+  // and here we multiply by three then these range will be from 0 to 3
+  //this will generate random number between 0 to 3
+  
+   computerChoice =  generateComputerChoice();
+   resultMsg = getResult('Stump',computerChoice);
+   showResult('Stump',computerChoice,resultMsg);"
+    >
+    <img src="images/stump.png" alt="Stump Image" class="choice-image">
+    </button>
+
+
+    <h3 id="user-move"></h3>
+    <h3 id="computer-move"></h3>
+    <h3 id="result"></h3>
+    <h3 id="score"></h3>
+
+    
+    <button onclick="localStorage.clear()
+        resetScore();
+    ">Reset</button>
+
+    <script>
+      // global variable
+      let scoreStr = localStorage.getItem('score');
+      let score;
+      resetScore(scoreStr);
+      function resetScore(scoreStr){
+        score = scoreStr ? JSON.parse(scoreStr) : {
+             win:0,
+             loss:0,
+             tie:0,
+        };          
+      
+      score.displayScore =  function(){
+          return `Score Won:${score.win} , Lost:${score.loss} , Tie:${score.tie}`;
+        };
+        showResult();
+      }
+      // instead of if ealse we use shorthand techniues
+
+     
+    //   if(scoreStr !== undefined){
+    //     score = JSON.parse(scoreStr);
+    //   }
+    //   else{
+    //    score = {
+    //     win:0,
+    //     loss:0,
+    //     tie:0,
+    //   };
+    // }
+  
+      function generateComputerChoice() {
+        let randomNumber = Math.random() * 3;
+
+        if (randomNumber > 0 && randomNumber <= 1) {
+          return "Bat";
+          // console.log('computer choice is Bat');
+        } else if (randomNumber > 1 && randomNumber <= 2) {
+          return "Ball";
+          // console.log('computer choice is  Ball');
+        } else {
+          return "Stump";
+          // console.log('computer choice is Stump');
+        }
+      }
+
+      function getResult(userMove, computerMove) {
+        // let resultMsg;
+        if (userMove == "Bat") {
+          if (computerMove === "Bat") {
+            score.tie++;
+            return `it's Tie!`;
+          } else if (computerMove === "Ball") {
+            score.win++;
+            return `You Won!`;
+          } else {
+            score.loss++;
+            return "Computer Won!";
+          }
+        }
+          else if (userMove == "Ball") {
+          if (computerMove === "Bat") {
+            score.loss++;
+            return `Computer Won!`;
+          } else if (computerMove === "Ball") {
+            score.tie++;
+            return `it's Tie!`;
+          } else {
+            score.win++;
+            return "You Won!";
+          }
+        }
+
+        else if (userMove == "Stump") {
+          if (computerMove === "Bat") {
+            score.win++;
+            return `You Won!`;
+          } else if (computerMove === "Ball") {
+            score.loss++;
+            return `Computer Won!`;
+          } else {
+            score.tie++;
+            return `it's Tie!`;
+          }
+      }
+    }
+
+    function showResult(userMove,computerMove,result){
+      // console.log(score);
+      localStorage.setItem('score',JSON.stringify(score));
+      document.querySelector('#user-move').innerText= userMove !== undefined ? `You Have Choosen ${userMove} `:'';
+      // in these we use another shorthand instead of if else or ternary
+      document.querySelector('#computer-move').innerText=computerMove !== undefined ?`Computer Choice is ${computerMove} `:'';
+      // in these we use ternary shorthad hand 
+      document.querySelector('#result').innerText =  result || '';
+      document.querySelector('#score').innerText=score.displayScore();
+      // alert(`You Have Choosen ${userMove}. Computer Choice is ${computerMove} 
+      
+      // ${result}
+      
+      // ${score.displayScore()}
+      // `);
+    }
+    </script>
+  </body>
+</html>
